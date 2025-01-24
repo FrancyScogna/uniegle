@@ -19,6 +19,8 @@ function UploadPhoto({image, setImage, setOpenUploadPhoto, openUploadPhoto}){
         }
     },[openUploadPhoto])
 
+    console.log("Ciao");
+
     //Funzione: associata all'input (invisibile) per selezionare l'immagine
     const handleImageUpload = (event) => {
         event.preventDefault();
