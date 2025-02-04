@@ -18,7 +18,7 @@ function Preview(){
     },[])
 
     return(
-        <div>
+        <div className="preview-div">
             <h1>Presentazione</h1>
             <h3>Descrizione applicazione</h3>
             <button onClick={onClickStartChat}>Inizia a chattare</button>
