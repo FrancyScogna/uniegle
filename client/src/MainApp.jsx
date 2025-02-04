@@ -6,7 +6,7 @@ function MainApp() {
     return (
         <div className="main-div">
             <div className="header-div">
-                <h1>Header Felice</h1>
+                <h1>Header</h1>
             </div>
             <div className="page-div">
                 <Outlet />
