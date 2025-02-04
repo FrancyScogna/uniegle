@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "./SetUserData.css";
 import { useEffect, useState } from "react";
 import UploadPhoto from "../../component/UploadPhoto/UploadPhoto";
+import { Divider, TextField, Typography } from '@mui/material';
 
 function SetUserData(){
 
@@ -67,31 +68,45 @@ function SetUserData(){
     }
 
     return(
-        <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-            <h1>Inserisci le informazioni</h1>
-            <h3>Inserisci un nickname e un immagine che ti rappresenta.</h3>
+        <div className="setuserdata-div">
+            <Typography variant="h3" className="title">Informazioni utente</Typography>
+            <div className="description-div">
+                <Typography className="description" >
+                    Scegli un nickname e carica una foto che ti rappresenti.
+                    Queste informazioni saranno visibili all'utente con cui verrai abbinato,
+                    permettendogli di decidere se accettare o meno la tua richiesta di connessione.
+                </Typography>
+            </div>
             <br />
 
-            <h5>Nickname</h5>
-            <input type="text" placeholder="Inserisci un nickname..." onChange={onChangeNickname} value={nickname} />
-        
-            <h5>Immagine</h5>
-            <img src={image} style={{backgroundColor: "gray", maxWidth: "200px", marginTop: "5px"}} />
-            <button onClick={onClickUploadPhoto}>Inserisci immagine</button>
-            {
-                openUploadPhoto && (
-                    <UploadPhoto 
-                        image={image} 
-                        setImage={setImage} 
-                        setOpenUploadPhoto={setOpenUploadPhoto} 
-                        openUploadPhoto={openUploadPhoto}
-                    />
-                )
-            }
+            <div className="form-div">
 
-            <button onClick={onClickReset}>Reset</button>
-            <button onClick={onClickChat} disabled={!image || !nickname}>Prosegui</button>   
+                <Typography className="form-title">Imposta i tuoi dati</Typography>
 
+                <Divider className="divider" textAlign="left">Inserisci il nickname</Divider>
+
+                <TextField onChange={onChangeNickname} value={nickname} size="small" className="textfield" label="Nickname" />
+            
+                <div className="selected-image-div">
+                    <img src={image} />
+                </div>
+                
+                <button onClick={onClickUploadPhoto}>Inserisci immagine</button>
+                {
+                    openUploadPhoto && (
+                        <UploadPhoto 
+                            image={image} 
+                            setImage={setImage} 
+                            setOpenUploadPhoto={setOpenUploadPhoto} 
+                            openUploadPhoto={openUploadPhoto}
+                        />
+                    )
+                }
+
+                <button onClick={onClickReset}>Reset</button>
+                <button onClick={onClickChat} disabled={!image || !nickname}>Prosegui</button> 
+
+            </div>  
         </div>
     )
 }

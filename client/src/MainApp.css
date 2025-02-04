@@ -1,45 +1,30 @@
-#root {
-    padding: 0;
-    margin: 0;
-    width: 100vw;
-    height: 100vh;
-}
-
 body {
     padding: 0;
     margin: 0;
     width: 100vw;
     height: 100vh;
+    overflow-x: hidden;
+    background-color: rgb(193, 238, 252);
+}
+
+#root {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .main-div {
     display: flex;
     width: 100%;
+    height: 100%;
     justify-content: center;
     flex-direction: column;
-}
-
-.header-div {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    height: 70px;
-    background-color: rgb(0, 195, 255);
 }
 
 .page-div {
     display: flex;
     width: 100%;
+    height: 100%;
     flex-direction: column;
-    height: calc(100vh - 130px);
-    background-color: rgb(193, 238, 252);
-}
-
-.footer-div {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    height: 60px;
-    background-color: rgb(0, 195, 255);
-
 }
