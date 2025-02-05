@@ -14,7 +14,6 @@ function SetUserData(){
     const navigate = useNavigate();
     const mobile = useMediaQuery("(max-width: 800px)")
 
-    const [userData, setUserData] = useState({});
     const [nickname, setNickname] = useState("");
     const [openUploadPhoto, setOpenUploadPhoto] = useState(false);
     const [image, setImage] = useState(null);
@@ -25,7 +24,6 @@ function SetUserData(){
         const userDataJSON = localStorage.getItem("userData");
         const userData = JSON.parse(userDataJSON);
         if(userData){
-            setUserData(userData);
             setImage(userData.imgSrc);
             setNickname(userData.nickname);
         }

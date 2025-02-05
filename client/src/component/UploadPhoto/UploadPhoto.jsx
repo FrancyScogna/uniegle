@@ -68,7 +68,7 @@ function UploadPhoto({image, setImage, setOpenUploadPhoto, openUploadPhoto}){
     }
 
     return(
-        <Dialog className="uploadphoto-dialog" open={openUploadPhoto} onClose={onClickClose} fullScreen={mobile}>
+        <Dialog className="uploadphoto-dialog" open={openUploadPhoto} onClose={onClickClose} fullScreen={mobile} fullWidth>
             <DialogTitle className="dialog-title">
                 <div className="top">
                     <Typography variant="h5" className="title">

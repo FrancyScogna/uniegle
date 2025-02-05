@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import "./TakePhoto.css";
 import { compressBase64Image } from "../../libs/image_manipulation";
+import { Button, CircularProgress, Dialog, DialogContent, DialogTitle, Divider, FormControl, IconButton, InputLabel, MenuItem, Select, Typography, useMediaQuery } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
 
 function TakePhoto({ setImage, openTakePhoto, setOpenTakePhoto }) {
+
+    const mobile = useMediaQuery("(max-width: 800px)")
 
     //Inizializzazione delle variabili
     const [devices, setDevices] = useState([]);
@@ -127,61 +133,92 @@ function TakePhoto({ setImage, openTakePhoto, setOpenTakePhoto }) {
         startCamera(deviceId);
     };
 
-    return (
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", border: "1px solid blue" }}>
-                <>
-                    <video
-                        ref={videoRef}
-                        style={{
-                            width: "300px",
-                            display: "block",
-                            marginBottom: "10px",
-                        }}
-                    />
-                    {
-                        cameraStatus === 'loading' && (
-                            <div>Loading...</div>
-                        )
-                    }
-                    {
-                        cameraStatus === 'no devices' && (
-                            <div>
-                                Dispositivi non trovati. Controlla le periferiche e clicca riprova.
-                                <button onClick={getDevices}>Riprova</button>
-                            </div>
-                        )
-                    }
-                    {
-                        cameraStatus === 'permission denied' && (
-                            <div>
-                                Non hai dato i permessi per accedere alla fotocamera.
-                                Dai i permessi tramite il browser e clicca riprova.
-                                <button onClick={getDevices}>Riprova</button>
-                            </div>
-                        
-                        )
-                    }
-                    {
-                        cameraStatus === 'error' && (
-                            <div>Si è verificato un errore con la fotocamera.</div>
-                        )
-                    }
+    const statusMessages = {
+        "no devices": {
+            message: "Dispositivi non trovati. Controlla le periferiche e riprova."
+        },
+        "permission denied": {
+            message: "Non hai dato i permessi per accedere alla fotocamera. Dai i permessi tramite il browser e riprova."
+        },
+        "error": {
+            message: "Si è verificato un errore con la fotocamera."
+        }
+    };
 
-                    {devices.length > 0 && (
-                        <select value={selectedDeviceId} onChange={handleDeviceChange}>
-                            {devices.map((device) => (
-                                <option key={device.deviceId} value={device.deviceId}>
-                                    {device.label || `Camera ${device.deviceId}`}
-                                </option>
-                            ))}
-                        </select>
+    return (
+        <Dialog className="takephoto-dialog" open={openTakePhoto} onClose={stopCameraAndClose} fullScreen={mobile} fullWidth>
+            {!mobile && <DialogTitle className="dialog-title">
+                <div className="top">
+                    <Typography variant="h5" className="title">
+                        Scatta una foto
+                    </Typography>
+                    <IconButton className="icon-button" onClick={stopCameraAndClose}>
+                        <CloseIcon />
+                    </IconButton>
+                </div>
+                <Divider className="divider" textAlign="left" />
+            </DialogTitle>}
+            {mobile && 
+            <div className="mobile-title-div">
+                <IconButton className="icon-button" onClick={stopCameraAndClose}>
+                    <CloseIcon className="icon" />
+                </IconButton>
+            </div>}
+            <DialogContent className="dialog-content">
+                <video ref={videoRef} style={{height: cameraStatus !== "on" ? "0px" : mobile && "100%"}} />
+                <div className="status-div" style={{height: cameraStatus === "on" && "0px"}}>
+                {cameraStatus === "loading" && <CircularProgress />}
+                    {statusMessages[cameraStatus] && (
+                        <div className="internal-status">
+                            <Typography className="status">{statusMessages[cameraStatus].message}</Typography>
+                            <Button variant="outlined" onClick={getDevices}>Riprova</Button>
+                        </div>
                     )}
-                    <button onClick={takePhoto} disabled={cameraStatus !== "on"}>Scatta</button>
-                    <button onClick={changeCameraButton} disabled={cameraStatus !== "on"}>Cambia</button>
-                    <button onClick={stopCameraAndClose} disabled={cameraStatus !== "on"}>Chiudi Fotocamera</button>
-                </>
-            <canvas ref={canvasRef} style={{ display: "none" }} />
-        </div>
+                </div>
+
+                {!mobile && 
+                <div className="desktop-buttons">
+                    {devices.length > 0 && (
+                        <FormControl fullWidth>
+                            <Select
+                                value={selectedDeviceId}
+                                onChange={handleDeviceChange}
+                                size="small"
+                                className="select"
+                            >
+                                {devices.map((device) => (
+                                    <MenuItem key={device.deviceId} value={device.deviceId}>
+                                        {device.label || `Camera ${device.deviceId}`}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    )}
+                    <div>
+                        <Button className="button-icon" onClick={takePhoto} disabled={cameraStatus !== "on"} size={mobile ? "small":"medium"} variant="contained">
+                            Scatta
+                            <PhotoCameraIcon className="button-icon" />
+                        </Button>
+                        <Button color="error" className="button-icon" disabled={cameraStatus !== "on"} size={mobile ? "small":"medium"} variant="contained" onClick={stopCameraAndClose}>
+                            Chiudi Fotocamera
+                            <CloseIcon className="button-icon" />
+                        </Button>
+                    </div>
+                </div>}
+                { mobile && 
+                    <div className="mobile-buttons">
+                        <IconButton onClick={takePhoto} className="icon-button-take" disabled={cameraStatus !== "on"}>
+                            <PhotoCameraIcon className="icon" />
+                        </IconButton>
+                        <IconButton onClick={changeCameraButton} disabled={cameraStatus !== "on"} className="icon-button-change">
+                            <CameraswitchIcon className="icon" />
+                        </IconButton>
+                    </div>
+                }
+                
+                <canvas ref={canvasRef} style={{ display: "none" }} />
+            </DialogContent>
+        </Dialog>
     );
 }
 
