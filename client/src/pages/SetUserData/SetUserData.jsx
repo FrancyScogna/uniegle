@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import UploadPhoto from "../../component/UploadPhoto/UploadPhoto";
 import { Button, Divider, TextField, Typography, useMediaQuery } from '@mui/material';
 import EmptyImage from "../../assets/images-empty.png";
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import DeleteIcon from '@mui/icons-material/Delete';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 function SetUserData(){
 
@@ -103,9 +106,15 @@ function SetUserData(){
                 </Divider>
 
                 <div className="image-buttons-div">
-                    <Button size={mobile ? "small":"medium"} variant="contained" onClick={onClickUploadPhoto} >Carica immagine</Button>
+                    <Button size={mobile ? "small":"medium"} variant="contained" onClick={onClickUploadPhoto} >
+                        Carica immagine
+                        <InsertPhotoIcon className="button-icon" />
+                    </Button>
                     {image && (
-                        <Button size={mobile ? "small":"medium"} color="error" variant="contained" onClick={onClickRemoveImage} >Elimina immagine</Button>
+                        <Button size={mobile ? "small":"medium"} color="error" variant="contained" onClick={onClickRemoveImage} >
+                            Elimina immagine
+                            <DeleteIcon className="button-icon"/>
+                        </Button>
                     )}
                 </div>
 
@@ -114,7 +123,7 @@ function SetUserData(){
                 </div>
                 
                 {
-                    openUploadPhoto && (
+                    true && (
                         <UploadPhoto 
                             image={image} 
                             setImage={setImage} 
@@ -125,8 +134,14 @@ function SetUserData(){
                 }
 
                 <div className="main-buttons-div">
-                    <Button size={mobile ? "small":"medium"} variant="contained" onClick={onClickChat} disabled={!image || !nickname} >Prosegui</Button>
-                    <Button size={mobile ? "small":"medium"} color="error" variant="contained" onClick={onClickReset} >Elimina dati</Button>
+                    <Button size={mobile ? "small":"medium"} variant="contained" onClick={onClickChat} disabled={!image || !nickname} >
+                        Prosegui
+                        <NavigateNextIcon className="button-icon"/>
+                    </Button>
+                    <Button size={mobile ? "small":"medium"} color="error" variant="contained" onClick={onClickReset} >
+                        Elimina dati
+                        <DeleteIcon className="button-icon"/>
+                    </Button>
                 </div>
 
             </div>  
