@@ -5,4 +5,100 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    overflow-y: hidden;
 }
+
+.preview-div h1{
+    font-size: 61px;
+    color: rgb(255, 102, 0) ;
+    margin-bottom: 1rem;
+}
+
+.preview-div h2{
+    font-size: 20px;
+    color: rgb(255, 102, 0) ;
+    margin-bottom: 1rem;
+    margin-left: 61px;
+}
+
+
+@media (max-width: 900px) {
+    .preview-div h1 {
+        font-size: 51px;
+    }
+    .preview-div h2 {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 740px) {
+    .preview-div h1 {
+        font-size: 31px;
+        margin-top: 62px;
+    }
+    .preview-div h2 {
+        font-size: 11px;
+        margin-left: 11px;
+    }
+    .button-start{
+        margin-top: 20px !important;
+    }
+}
+
+@media (max-width: 450px) {
+    .preview-div h1 {
+        font-size: 24px;
+        margin-top: 62px;
+    }
+    .preview-div h2 {
+        font-size: 8px;
+    margin-left: 16px;
+    }
+}
+
+.uniegle-div{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    z-index: 1;
+    overflow: hidden;
+    position: sticky;
+}
+
+@media (max-width: 1800px) {
+    .img-style {
+        width: 765px;
+        height: 412px;
+        left: -69px;
+        position: relative;
+        top: -39px;
+    }
+}
+@media (max-width: 750px){
+    .img-style{
+        left: -26px;
+        position: relative;
+        top: -39px;
+    }
+}
+
+
+.preview-organizer{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.background-div{
+    z-index: 0;
+    overflow: hidden;
+}
+
+.background-div img{
+  width: 100%;
+  height: 100%;
+  object-fit: revert-layer;
+  
+}
+
