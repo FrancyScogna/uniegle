@@ -1,0 +1,27 @@
+.chat-div .video-div .my-cam .wrap-devices-div {
+    display: block;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+}
+
+.chat-div .video-div .my-cam .devices-div {
+    display: block;
+    position: absolute;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    bottom: 0px;
+    background-color: rgba(255, 255, 255, 0.73);
+    z-index: 1;
+}
+
+.chat-div .video-div .my-cam .devices-div .icon {
+   margin-right: 5px;
+}
+
+.chat-div .video-div .my-cam .devices-div .select-text {
+    font-size: 13px !important;
+}

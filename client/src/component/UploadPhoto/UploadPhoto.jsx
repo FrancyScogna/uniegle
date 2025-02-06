@@ -2,8 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { compressBase64Image } from "../../libs/image_manipulation";
 import "./UploadPhoto.css";
 import TakePhoto from "../TakePhoto/TakePhoto";
+import { Button, Dialog, DialogContent, DialogTitle, Divider, IconButton, Typography, useMediaQuery } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import EmptyImage from "../../assets/images-empty.png";
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
 
 function UploadPhoto({image, setImage, setOpenUploadPhoto, openUploadPhoto}){
+
+    const mobile = useMediaQuery("(max-width: 800px)")
 
     //Inizializzazione delle variabili
     const inputFileRef = useRef();
@@ -59,33 +68,63 @@ function UploadPhoto({image, setImage, setOpenUploadPhoto, openUploadPhoto}){
     }
 
     return(
-        <div style={{marginTop: "20px", border: "1px solid red", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
-            <button onClick={onClickClose}>Chiudi</button>
-            <h1>Carica un'immagine oppure scatta una foto.</h1>
-            <img src={newImage} style={{backgroundColor: "gray", maxWidth: "200px", marginTop: "5px"}} />
+        <Dialog className="uploadphoto-dialog" open={openUploadPhoto} onClose={onClickClose} fullScreen={mobile} fullWidth>
+            <DialogTitle className="dialog-title">
+                <div className="top">
+                    <Typography variant="h5" className="title">
+                        Carica immagine
+                    </Typography>
+                    <IconButton className="icon-button" onClick={onClickClose}>
+                        <CloseIcon />
+                    </IconButton>
+                </div>
+                <Divider className="divider" textAlign="left" />
+            </DialogTitle>
+            <DialogContent className="dialog-content">
 
-            <div>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    style={{display: "none"}}
-                    ref={inputFileRef}
-                />
-                <button onClick={() => inputFileRef.current.click()}>Carica foto</button>
-                {
-                    openTakePhoto &&
-                    (
-                        <TakePhoto setOpenTakePhoto={setOpenTakePhoto} openTakePhoto={openTakePhoto} setImage={setNewImage} />
-                    )
-                }
-                <button onClick={onClickTakePhoto}>Scatta foto</button>
-            </div>
-            <div>
-                <button onClick={onClickDeletePhoto}>Elimina foto</button>
-                <button onClick={onClickConfirm}>Conferma</button>
-            </div>
-        </div>
+                <Typography className="description">
+                Carica un'immagine direttamente dal tuo dispositivo oppure scatta una foto in tempo reale.
+                </Typography>
+
+                <div className="top-buttons">
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        style={{display: "none"}}
+                        ref={inputFileRef}
+                    />
+                    <Button size={mobile ? "small":"medium"} variant="contained" onClick={() => inputFileRef.current.click()}>
+                        Carica foto
+                        <InsertPhotoIcon className="button-icon" />
+                    </Button>
+                    {
+                        openTakePhoto &&
+                        (
+                            <TakePhoto setOpenTakePhoto={setOpenTakePhoto} openTakePhoto={openTakePhoto} setImage={setNewImage} />
+                        )
+                    }
+                    <Button size={mobile ? "small":"medium"} variant="contained" onClick={onClickTakePhoto}>
+                        Scatta foto
+                        <PhotoCameraIcon className="button-icon" />
+                    </Button>
+                    <Button size={mobile ? "small":"medium"} variant="contained" color="error"  onClick={onClickDeletePhoto}>
+                        Elimina foto
+                        <DeleteIcon className="button-icon"/>
+                    </Button>
+                </div>
+
+                <div className="selected-image-div">
+                    <img src={newImage ? newImage : EmptyImage} style={{width: (!newImage && !mobile ) ? "400px":"100%"}}/>
+                </div>
+
+                <Button size={mobile ? "small":"medium"} variant="contained" onClick={onClickConfirm}>
+                    Conferma
+                    <SaveIcon className="button-icon"/>
+                </Button>
+
+            </DialogContent>
+        </Dialog>
     )
 }
 

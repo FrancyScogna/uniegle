@@ -2,13 +2,18 @@ import { useNavigate } from "react-router-dom";
 import "./SetUserData.css";
 import { useEffect, useState } from "react";
 import UploadPhoto from "../../component/UploadPhoto/UploadPhoto";
+import { Button, Divider, TextField, Typography, useMediaQuery } from '@mui/material';
+import EmptyImage from "../../assets/images-empty.png";
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import DeleteIcon from '@mui/icons-material/Delete';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 function SetUserData(){
 
     //Inizializzazione variabili
     const navigate = useNavigate();
+    const mobile = useMediaQuery("(max-width: 800px)")
 
-    const [userData, setUserData] = useState({});
     const [nickname, setNickname] = useState("");
     const [openUploadPhoto, setOpenUploadPhoto] = useState(false);
     const [image, setImage] = useState(null);
@@ -19,7 +24,6 @@ function SetUserData(){
         const userDataJSON = localStorage.getItem("userData");
         const userData = JSON.parse(userDataJSON);
         if(userData){
-            setUserData(userData);
             setImage(userData.imgSrc);
             setNickname(userData.nickname);
         }
@@ -28,15 +32,22 @@ function SetUserData(){
 
     //Funzione: quando cambia l'imput del nickname imposta la variabile
     const onChangeNickname = (e) => {
-        let userDataTmp = userData;
-        userDataTmp = {...userData, nickname: e.target.value};
-        localStorage.setItem("userData", JSON.stringify(userDataTmp));
         setNickname(e.target.value);
     }
 
     //Funzione: apre il dialog per l'upload della foto
     const onClickUploadPhoto = (e) => {
         setOpenUploadPhoto(true);
+    }
+
+    const onClickRemoveImage = () => {
+        setImage(null);
+        if(nickname){
+            const userData = {nickname: nickname};
+            localStorage.setItem("userData", JSON.stringify(userData));
+        }else{
+            localStorage.setItem("userData", JSON.stringify({}));
+        }
     }
 
     //Funzione: imposta i dati immessi dall'utente e li inserisce nel localstorage
@@ -67,31 +78,71 @@ function SetUserData(){
     }
 
     return(
-        <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-            <h1>Inserisci le informazioni</h1>
-            <h3>Inserisci un nickname e un immagine che ti rappresenta.</h3>
-            <br />
+        <div className="setuserdata-div">
+            <Typography variant="h3" className="title">Informazioni utente</Typography>
 
-            <h5>Nickname</h5>
-            <input type="text" placeholder="Inserisci un nickname..." onChange={onChangeNickname} value={nickname} />
-        
-            <h5>Immagine</h5>
-            <img src={image} style={{backgroundColor: "gray", maxWidth: "200px", marginTop: "5px"}} />
-            <button onClick={onClickUploadPhoto}>Inserisci immagine</button>
-            {
-                openUploadPhoto && (
-                    <UploadPhoto 
-                        image={image} 
-                        setImage={setImage} 
-                        setOpenUploadPhoto={setOpenUploadPhoto} 
-                        openUploadPhoto={openUploadPhoto}
-                    />
-                )
-            }
+            <div className="form-div">
 
-            <button onClick={onClickReset}>Reset</button>
-            <button onClick={onClickChat} disabled={!image || !nickname}>Prosegui</button>   
+                <Typography className="form-title">Imposta i tuoi dati</Typography>
 
+                <div className="description-div">
+                    <Typography className="description" >
+                        Scegli un nickname e carica una foto che ti rappresenti.
+                        Queste informazioni saranno visibili all'utente con cui verrai abbinato,
+                        permettendogli di decidere se accettare o meno la tua richiesta di connessione.
+                    </Typography>
+                </div>
+
+                <Divider className="divider" textAlign="left">
+                    <Typography>Inserisci il nickname</Typography>
+                </Divider>
+
+                <TextField onChange={onChangeNickname} value={nickname} size="small" className="textfield" label="Nickname" />
+            
+                <Divider className="divider" textAlign="left">
+                    <Typography>Inserisci un'immagine</Typography>
+                </Divider>
+
+                <div className="image-buttons-div">
+                    <Button size={mobile ? "small":"medium"} variant="contained" onClick={onClickUploadPhoto} >
+                        Carica immagine
+                        <InsertPhotoIcon className="button-icon" />
+                    </Button>
+                    {image && (
+                        <Button size={mobile ? "small":"medium"} color="error" variant="contained" onClick={onClickRemoveImage} >
+                            Elimina immagine
+                            <DeleteIcon className="button-icon"/>
+                        </Button>
+                    )}
+                </div>
+
+                <div className="selected-image-div">
+                    <img src={image ? image : EmptyImage} style={{width: (!image && !mobile ) ? "400px":"100%"}}/>
+                </div>
+                
+                {
+                    true && (
+                        <UploadPhoto 
+                            image={image} 
+                            setImage={setImage} 
+                            setOpenUploadPhoto={setOpenUploadPhoto} 
+                            openUploadPhoto={openUploadPhoto}
+                        />
+                    )
+                }
+
+                <div className="main-buttons-div">
+                    <Button size={mobile ? "small":"medium"} variant="contained" onClick={onClickChat} disabled={!image || !nickname} >
+                        Prosegui
+                        <NavigateNextIcon className="button-icon"/>
+                    </Button>
+                    <Button size={mobile ? "small":"medium"} color="error" variant="contained" onClick={onClickReset} >
+                        Elimina dati
+                        <DeleteIcon className="button-icon"/>
+                    </Button>
+                </div>
+
+            </div>  
         </div>
     )
 }

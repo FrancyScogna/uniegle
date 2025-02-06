@@ -1,0 +1,66 @@
+.uploadphoto-dialog .dialog-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.uploadphoto-dialog .dialog-title .top {
+    display: flex;
+    width: 100%;
+}
+
+.uploadphoto-dialog .dialog-title .top .title{
+    font-weight: bold;
+    margin-left: auto;
+    margin-right: -48px;
+}
+
+.uploadphoto-dialog .dialog-title .top .icon-button{
+    margin-left: auto;
+    margin-top: -3px;
+}
+
+.uploadphoto-dialog .dialog-title .divider {
+    width: 100%;
+}
+
+.uploadphoto-dialog .dialog-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.uploadphoto-dialog .dialog-content .top-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.uploadphoto-dialog .dialog-content .button-icon {
+    margin-left: 4px;
+    margin-top: -3px;
+    font-size: 20px;
+}
+
+.uploadphoto-dialog .dialog-content .selected-image-div {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    align-items: center;
+}
+
+.uploadphoto-dialog .dialog-content .selected-image-div img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+    border: 1px solid black;
+    background-color: rgb(182, 182, 182);
+}
