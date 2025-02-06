@@ -46,10 +46,8 @@ function TakePhoto({ setImage, openTakePhoto, setOpenTakePhoto }) {
             }else{
                 setCameraStatus("no devices");
             }
-            console.log("Camera status: all done.");
             setCameraStatus("on");
         } catch (error) {
-            console.log(error)
             if(error.message === "Permission denied"){
                 setCameraStatus("permission denied");
             }else{

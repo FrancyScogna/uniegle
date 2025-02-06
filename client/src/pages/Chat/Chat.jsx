@@ -4,7 +4,12 @@ import { useNavigate } from "react-router-dom";
 import MyCam from "../../component/MyCam/MyCam";
 import Request from "../../component/Request/Request";
 import TextChat from "../../component/TextChat/TextChat";
-import { useMediaQuery } from "@mui/material";
+import WhiteNoise from "../../assets/white_noise.mp4";
+import { Button, IconButton, Typography, useMediaQuery } from "@mui/material";
+import PublicIcon from '@mui/icons-material/Public';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import ChatIcon from '@mui/icons-material/Chat';
 
 function Chat({socket}){
 
@@ -19,6 +24,7 @@ function Chat({socket}){
     const [selectedAudioDevice, setSelectedAudioDevice] = useState('');
     const [messages, setMessages] = useState([]);
     const [disabledChat, setDisabledChat] = useState(true);
+    const [status, setStatus] = useState("init");
     const localVideoRef = useRef();
     const remoteVideoRef = useRef();
     const peerConnection = useRef();
@@ -27,7 +33,7 @@ function Chat({socket}){
         const userDataJSON = localStorage.getItem("userData");
         const userData = JSON.parse(userDataJSON);
         if(!userData){
-            navigate('/user-profile', {replace: true});
+            navigate('/', {replace: true});
         }else {
             setUserData(userData);
             socket.emit('user data', userData);
@@ -39,7 +45,7 @@ function Chat({socket}){
 
         socket.on('connect', () => {
             disconnectChat();
-            navigate("/user-profile", {replace: true});
+            navigate("/", {replace: true});
         });
 
         socket.on('signal', async (data) => {
@@ -47,6 +53,7 @@ function Chat({socket}){
                 await peerConnection.current.addIceCandidate(data.candidate);
                 setDisabledChat(false);
                 setOpenRequest(false);
+                setStatus(`connected`)
             } else if (data.sdp) {
                 await peerConnection.current.setRemoteDescription(new RTCSessionDescription(data.sdp));
                 if (data.sdp.type === 'offer') {
@@ -58,6 +65,7 @@ function Chat({socket}){
         });
 
         socket.on('paired', async (data) => {
+            setStatus("paired")
             const configuration = {
                 iceServers: [
                     { urls: 'stun:stun.l.google.com:19302' },
@@ -83,6 +91,7 @@ function Chat({socket}){
             setOpenRequest(false);
             setDisabledChat(true);
             setMessages([]);
+            setStatus("disconnected")
             remoteVideoRef.current.srcObject = null;
         });
 
@@ -93,11 +102,13 @@ function Chat({socket}){
         socket.on('request', (data) => {
             setRequest(data);
             setOpenRequest(true);
+            setStatus("waitrequest")
         })
 
         socket.on('rejected', () => {
             setRequest(null);
             setOpenRequest(false);
+            setStatus("rejectrequest")
         })
 
         socket.on('missing userdata', () => {
@@ -169,6 +180,7 @@ function Chat({socket}){
     }
 
     const onClickSkip = () => {
+        setStatus("skip")
         socket.emit('skip');
         setRequest(null);
         setOpenRequest(false);
@@ -178,10 +190,24 @@ function Chat({socket}){
         }
     }
 
+    const statusMessages = {
+        "init": ["In attesa di un nuovo utente..."],
+        "connected": ["Connesso con l'utente!"],
+        "paired": ["Utente trovato!", "Connessione in corso..."],
+        "disconnected": ["L'utente si è disconnesso!", "In attesa di un nuovo utente..."],
+        "waitrequest": ["In attesa della richiesta..."],
+        "rejectrequest": ["Richiesta rifiutata!", "In attesa di un nuovo utente..."],
+        "skip": ["Disconnesso!", "In attesa di un nuovo partner..."]
+    }
+
+    const onClickOpenChatMobile = () => {
+        //Apre il drawer per la chat mobile
+    }
+
     return(
         <div className="chat-div">
             <div className="central-div">
-                {request && 
+                {openRequest && 
                 <Request 
                 request={request} 
                 setRequest={setRequest} 
@@ -197,28 +223,58 @@ function Chat({socket}){
                         setSelectedVideoDevice={setSelectedVideoDevice}
                         localVideoRef={localVideoRef} 
                         startStream={startStream} />
+                        {mobile && 
+                        <IconButton onClick={onClickOpenChatMobile} className="mobile-chat-button">
+                            <ChatIcon className="icon" />
+                        </IconButton>}
                     </div>
                     <div className="other-cam">
                         <video 
                         playsInline 
                         ref={remoteVideoRef} 
+                        src={!remoteVideoRef.current?.srcObject ? WhiteNoise : remoteVideoRef.current.srcObject }
+                        muted={!remoteVideoRef.current?.srcObject ? true : false}
+                        style={{objectFit: !remoteVideoRef.current?.srcObject && "cover"}}
+                        loop={!remoteVideoRef.current?.srcObject ? true : false}
                         autoPlay 
                         />
+                        <div className="status-div">
+                            <PublicIcon className="icon" />
+                            <Typography 
+                                    className="status-text"
+                                    variant="body1" 
+                                >
+                            {statusMessages[status]?.map((message, index) => (
+                                <>
+                                    {message}
+                                    <br/>
+                                </>
+                            ))}
+                            </Typography>
+                        </div>
                     </div>
                 </div>
-                {!mobile && <TextChat
-                messages={messages}
-                setMessages={setMessages}  
-                disabledChat={disabledChat}
-                partnerData={request ? request : {}}
-                myData={userData}
-                socket={socket} />}
-                <div style={{display: "flex", width: "100%"}}>
-                    <button onClick={() => {
-                        disconnectChat();
-                        navigate("/user-profile", {replace: true});
-                        }}>Interrompi</button>
-                    <button onClick={onClickSkip} disabled={disabledChat}>Skip</button>
+                <div className="content-div">
+                    {!mobile && <TextChat
+                    messages={messages}
+                    setMessages={setMessages}  
+                    disabledChat={disabledChat}
+                    partnerData={request ? request : {}}
+                    myData={userData}
+                    socket={socket} />}
+                    <div className="buttons-div">
+                        <Button color="error" variant="contained" size="large" fullWidth onClick={() => {
+                            disconnectChat();
+                            navigate("/user-profile", {replace: true});
+                            }}>
+                                Interrompi
+                                <StopCircleIcon className="button-icon"/>
+                        </Button>
+                        <Button color="warning" variant="contained" size="large" fullWidth onClick={onClickSkip} disabled={disabledChat}>
+                            Skip
+                            <SkipNextIcon className="button-icon"/>
+                        </Button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,6 +4,7 @@ function Request({request, setRequest, setOpenRequest, socket, openRequest}){
 
     const onClickAcceptRequest = () => {
         socket.emit('accept');
+        setOpenRequest(false);
     }
 
     const onClickRejectRequest = () => {

@@ -3,8 +3,8 @@ import "./Preview.css";
 import { useEffect } from "react";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import logo from "../../../public/logo2.png"
-import uniegle from "../../../public/uniegle.png" 
+import logo from "../../assets/people.png";
+import uniegle from "../../assets/logo.png" 
 function Preview(){
 
     //Definizione variabili
