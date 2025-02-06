@@ -1,6 +1,6 @@
 import "./Request.css";
 
-function Request({request, setRequest, setOpenRequest, socket}){
+function Request({request, setRequest, setOpenRequest, socket, openRequest}){
 
     const onClickAcceptRequest = () => {
         socket.emit('accept');

@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import MyCam from "../../component/MyCam/MyCam";
 import Request from "../../component/Request/Request";
 import TextChat from "../../component/TextChat/TextChat";
+import { useMediaQuery } from "@mui/material";
 
 function Chat({socket}){
 
     //Inizializzazione delle variabili
     const navigate = useNavigate();
+    const mobile = useMediaQuery("(max-width: 550px)")
 
     const [userData, setUserData] = useState({});
     const [request, setRequest] = useState(null);
@@ -177,46 +179,47 @@ function Chat({socket}){
     }
 
     return(
-        <div style={{display: "flex", flexDirection: "column"}}>
-            {openRequest && (
+        <div className="chat-div">
+            <div className="central-div">
+                {request && 
                 <Request 
                 request={request} 
                 setRequest={setRequest} 
                 setOpenRequest={setOpenRequest} 
-                socket={socket} />
-            )}
-            <h1>Chat</h1>
-            <div style={{display: "flex", flexDirection: "row"}}>
-                <div style={{width: "400px"}}>
-                    <MyCam 
-                    selectedAudioDevice={selectedAudioDevice}
-                    selectedVideoDevice={selectedVideoDevice}
-                    setSelectedAudioDevice={setSelectedAudioDevice}
-                    setSelectedVideoDevice={setSelectedVideoDevice}
-                    localVideoRef={localVideoRef} 
-                    startStream={startStream} />
+                openRequest={openRequest}
+                socket={socket} />}
+                <div className="video-div">
+                    <div className="my-cam">
+                        <MyCam 
+                        selectedAudioDevice={selectedAudioDevice}
+                        selectedVideoDevice={selectedVideoDevice}
+                        setSelectedAudioDevice={setSelectedAudioDevice}
+                        setSelectedVideoDevice={setSelectedVideoDevice}
+                        localVideoRef={localVideoRef} 
+                        startStream={startStream} />
+                    </div>
+                    <div className="other-cam">
+                        <video 
+                        playsInline 
+                        ref={remoteVideoRef} 
+                        autoPlay 
+                        />
+                    </div>
                 </div>
-                <div style={{width: "400px", height: "400px"}}>
-                    <video 
-                    playsInline 
-                    ref={remoteVideoRef} 
-                    autoPlay 
-                    style={{ width: '100%', height: "400px", border: '1px solid black' }} />
+                {!mobile && <TextChat
+                messages={messages}
+                setMessages={setMessages}  
+                disabledChat={disabledChat}
+                partnerData={request ? request : {}}
+                myData={userData}
+                socket={socket} />}
+                <div style={{display: "flex", width: "100%"}}>
+                    <button onClick={() => {
+                        disconnectChat();
+                        navigate("/user-profile", {replace: true});
+                        }}>Interrompi</button>
+                    <button onClick={onClickSkip} disabled={disabledChat}>Skip</button>
                 </div>
-            </div>
-            <TextChat
-            messages={messages}
-            setMessages={setMessages}  
-            disabledChat={disabledChat}
-            partnerData={request ? request : {}}
-            myData={userData}
-            socket={socket} />
-            <div style={{display: "flex", width: "100%"}}>
-                <button onClick={() => {
-                    disconnectChat();
-                    navigate("/user-profile", {replace: true});
-                    }}>Interrompi</button>
-                <button onClick={onClickSkip} disabled={disabledChat}>Skip</button>
             </div>
         </div>
     )
