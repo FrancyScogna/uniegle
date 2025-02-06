@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import "./Preview.css";
 import { useEffect } from "react";
-
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import logo from "../../../public/logo2.png"
+import uniegle from "../../../public/uniegle.png" 
 function Preview(){
 
     //Definizione variabili
@@ -18,11 +21,23 @@ function Preview(){
     },[])
 
     return(
-        <div className="preview-div">
-            <h1>Presentazione</h1>
-            <h3>Descrizione applicazione</h3>
-            <button onClick={onClickStartChat}>Inizia a chattare</button>
-        </div>
+        <>
+            <div className="uniegle-div">
+                 <img src={uniegle} className="img-style"/>
+            </div>
+            <div className="preview-div"> 
+                <div className="preview-organizer">
+                    <Typography variant="h1">Incontra nuovi colleghi universitari</Typography>
+                    <Typography variant="h2">Non perdere tempo! Conosci subito i tuoi nuovi colleghi e inizia a condividere esperienze.</Typography>
+                    <Button className="button-start" variant="contained" sx={{}}onClick={onClickStartChat}>Inizia a chattare</Button>
+                </div>  
+                <div style={{flex:'1'}}></div>
+                <div className="background-div">
+                    <img src= {logo}/>
+                </div>
+            </div>     
+           
+        </>
     );
 
 }
