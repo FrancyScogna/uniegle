@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import MyCam from "../../component/MyCam/MyCam";
 import Request from "../../component/Request/Request";
 import TextChat from "../../component/TextChat/TextChat";
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery,Drawer,Button } from "@mui/material";
 
 function Chat({socket}){
 
@@ -19,10 +19,18 @@ function Chat({socket}){
     const [selectedAudioDevice, setSelectedAudioDevice] = useState('');
     const [messages, setMessages] = useState([]);
     const [disabledChat, setDisabledChat] = useState(true);
+    const [openDrawer,setOpenDrawer] = useState(false);
     const localVideoRef = useRef();
     const remoteVideoRef = useRef();
     const peerConnection = useRef();
 
+
+    useEffect(() => {
+        if (!mobile) {
+            setOpenDrawer(false);
+        }
+    }, [mobile]);
+    
     useEffect(() => {
         const userDataJSON = localStorage.getItem("userData");
         const userData = JSON.parse(userDataJSON);
@@ -213,12 +221,33 @@ function Chat({socket}){
                 partnerData={request ? request : {}}
                 myData={userData}
                 socket={socket} />}
+
+                <Drawer
+                    anchor="bottom"
+                    open={openDrawer}
+                    onClose={() => setOpenDrawer(false)}
+                    PaperProps={{ style: { height: "52%", borderRadius: "15px 15px 0 0",overflow:'hidden' } }}
+                >
+                <div style={{ padding: "10px", display: "flex", flexDirection: "column", height: "100%" }}>
+                    <TextChat
+                        messages={messages}
+                        setMessages={setMessages}  
+                        disabledChat={disabledChat}
+                        partnerData={request ? request : {}}
+                        myData={userData}
+                        socket={socket} 
+                    />
+                </div>
+                </Drawer>
+
+
                 <div style={{display: "flex", width: "100%"}}>
                     <button onClick={() => {
                         disconnectChat();
                         navigate("/user-profile", {replace: true});
                         }}>Interrompi</button>
                     <button onClick={onClickSkip} disabled={disabledChat}>Skip</button>
+                    <button onClick={() => setOpenDrawer(true)} disabled={!mobile}>Apri Chat</button>
                 </div>
             </div>
         </div>
