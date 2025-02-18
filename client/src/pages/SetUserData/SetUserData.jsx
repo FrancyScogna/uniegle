@@ -2,11 +2,12 @@ import { useNavigate } from "react-router-dom";
 import "./SetUserData.css";
 import { useEffect, useState } from "react";
 import UploadPhoto from "../../component/UploadPhoto/UploadPhoto";
-import { Button, Divider, TextField, Typography, useMediaQuery } from '@mui/material';
+import { Alert, Button, Divider, TextField, Typography, useMediaQuery } from '@mui/material';
 import EmptyImage from "../../assets/images-empty.png";
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import DeleteIcon from '@mui/icons-material/Delete';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 function SetUserData(){
 
@@ -59,7 +60,7 @@ function SetUserData(){
             }
             localStorage.setItem("userData", JSON.stringify(userData))
         }
-        navigate("/chat");
+        navigate("/chat", { replace: true });
     }
 
     //Funzione: elimina i dati dal local storage e resetta le variabili
@@ -79,18 +80,21 @@ function SetUserData(){
 
     return(
         <div className="setuserdata-div">
-            <Typography variant="h3" className="title">Informazioni utente</Typography>
-
             <div className="form-div">
 
-                <Typography className="form-title">Imposta i tuoi dati</Typography>
+                <div className="backbutton-div">
+                    <Button variant="outlined" size="small" onClick={() => {navigate("/", {replace: true})}}>
+                        <ArrowBackIcon className="icon"/>
+                        Indietro
+                    </Button>
+                </div>
 
                 <div className="description-div">
-                    <Typography className="description" >
+                    <Alert severity="info" className="description" >
                         Scegli un nickname e carica una foto che ti rappresenti.
                         Queste informazioni saranno visibili all'utente con cui verrai abbinato,
                         permettendogli di decidere se accettare o meno la tua richiesta di connessione.
-                    </Typography>
+                    </Alert>
                 </div>
 
                 <Divider className="divider" textAlign="left">

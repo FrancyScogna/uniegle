@@ -4,7 +4,7 @@ body {
     width: 100%;
     height: 100vh;
     overflow-x: hidden;
-    background-color: rgb(193, 238, 252);
+    background-color: rgb(255, 235, 199);
 }
 
 #root {
@@ -18,13 +18,73 @@ body {
     display: flex;
     width: 100%;
     height: 100%;
-    justify-content: center;
+    align-items: center;
     flex-direction: column;
+}
+
+.header {
+    width: 100%;
+    height: 60px;
+    background-color:  rgb(255, 119, 29);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.header .logo {
+    font-family: "Comfortaa", sans-serif;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.header .logo .logo-sup {
+    font-family: "Comfortaa", sans-serif;
+    font-size: 12px;
+    margin-left: 3px;
 }
 
 .page-div {
     display: flex;
-    width: 100%;
+    width: 100vw;
     height: 100%;
     flex-direction: column;
+    overflow-y: auto;
+    margin-top: 60px;
+}
+
+.footer {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 50px;
+    align-items: center;
+    background-color: rgb(255, 119, 29);
+}
+
+.footer .authors {
+    margin-left: 10px;
+    margin-right: auto;
+}
+
+.footer .authors .text {
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+
+.footer .company {
+    margin-right: 10px;
+}
+
+.footer .company .text {
+   font-weight: bold;
+   font-size: 13px;
+   color: white;
 }
