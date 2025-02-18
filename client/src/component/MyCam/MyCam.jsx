@@ -82,6 +82,7 @@ function MyCam({localVideoRef, startStream, selectedVideoDevice, selectedAudioDe
                                 setSelectedVideoDevice(e.target.value);
                                 startStream(e.target.value, selectedAudioDevice);
                             }}
+                            onClose={() => setShowDevices(false)}
                         >
                             {videoDevices.map((device) => (
                                 <MenuItem key={device.deviceId} value={device.deviceId}>
@@ -101,6 +102,7 @@ function MyCam({localVideoRef, startStream, selectedVideoDevice, selectedAudioDe
                                 setSelectedAudioDevice(e.target.value);
                                 startStream(selectedVideoDevice, e.target.value);
                             }}
+                            onClose={() => setShowDevices(false)}
                         >
                             {audioDevices.map((device) => (
                                 <MenuItem key={device.deviceId} value={device.deviceId}>
