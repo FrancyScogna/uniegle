@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import "./Chat.css";
 import { useNavigate } from "react-router-dom";
 import MyCam from "../../component/MyCam/MyCam";
 import Request from "../../component/Request/Request";
 import TextChat from "../../component/TextChat/TextChat";
 import WhiteNoise from "../../assets/white_noise.mp4";
-import { Button, IconButton, Typography, useMediaQuery } from "@mui/material";
+import { Button, IconButton, Typography, useMediaQuery, Drawer } from "@mui/material";
 import PublicIcon from '@mui/icons-material/Public';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
@@ -25,10 +25,18 @@ function Chat({socket}){
     const [messages, setMessages] = useState([]);
     const [disabledChat, setDisabledChat] = useState(true);
     const [status, setStatus] = useState("init");
+    const [openDrawer,setOpenDrawer] = useState(false);
     const localVideoRef = useRef();
     const remoteVideoRef = useRef();
     const peerConnection = useRef();
 
+
+    useEffect(() => {
+        if (!mobile) {
+            setOpenDrawer(false);
+        }
+    }, [mobile]);
+    
     useEffect(() => {
         const userDataJSON = localStorage.getItem("userData");
         const userData = JSON.parse(userDataJSON);
@@ -201,7 +209,7 @@ function Chat({socket}){
     }
 
     const onClickOpenChatMobile = () => {
-        //Apre il drawer per la chat mobile
+        setOpenDrawer(true);
     }
 
     return(
@@ -245,10 +253,10 @@ function Chat({socket}){
                                     variant="body1" 
                                 >
                             {statusMessages[status]?.map((message, index) => (
-                                <>
+                                <Fragment key={index}>
                                     {message}
                                     <br/>
-                                </>
+                                </Fragment>
                             ))}
                             </Typography>
                         </div>
@@ -262,6 +270,7 @@ function Chat({socket}){
                     partnerData={request ? request : {}}
                     myData={userData}
                     socket={socket} />}
+                    
                     <div className="buttons-div">
                         <Button color="error" variant="contained" size="large" fullWidth onClick={() => {
                             disconnectChat();
@@ -276,6 +285,25 @@ function Chat({socket}){
                         </Button>
                     </div>
                 </div>
+
+                <Drawer
+                    anchor="bottom"
+                    open={openDrawer}
+                    onClose={() => setOpenDrawer(false)}
+                    PaperProps={{ style: { height: "52%", borderRadius: "15px 15px 0 0",overflow:'hidden' } }}
+                >
+                    <div style={{ padding: "10px", display: "flex", flexDirection: "column", height: "100%" }}>
+                        <TextChat
+                            messages={messages}
+                            setMessages={setMessages}  
+                            disabledChat={disabledChat}
+                            partnerData={request ? request : {}}
+                            myData={userData}
+                            socket={socket} 
+                        />
+                    </div>
+                </Drawer>
+
             </div>
         </div>
     )
