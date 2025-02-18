@@ -1,0 +1,35 @@
+.text-chat-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-height: 94%;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.text-chat-messages {
+    flex-grow: 1;
+    overflow-y: auto; /* Abilita lo scrolling se il contenuto è troppo lungo */
+    padding: 10px;
+    border: 1px solid black;
+    height: 100%;
+}
+
+.text-chat-form {
+    display: flex;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+.text-chat-form input {
+    flex: 1;
+    padding: 8px;
+}
+
+.text-chat-form button {
+    padding: 8px;
+    cursor: pointer;
+}
