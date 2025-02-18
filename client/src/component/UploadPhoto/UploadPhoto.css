@@ -29,9 +29,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: auto;
 }
 
-.uploadphoto-dialog .dialog-content .top-buttons {
+.uploadphoto-dialog .dialog-content .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: auto;
+}
+
+.uploadphoto-dialog .dialog-content .content .description {
+    display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.uploadphoto-dialog .dialog-content .content .top-buttons {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
@@ -41,13 +56,13 @@
     margin-bottom: 5px;
 }
 
-.uploadphoto-dialog .dialog-content .button-icon {
+.uploadphoto-dialog .dialog-content .content .button-icon {
     margin-left: 4px;
     margin-top: -3px;
     font-size: 20px;
 }
 
-.uploadphoto-dialog .dialog-content .selected-image-div {
+.uploadphoto-dialog .dialog-content .content .selected-image-div {
     margin-bottom: 10px;
     margin-top: 10px;
     display: flex;
@@ -57,7 +72,7 @@
     align-items: center;
 }
 
-.uploadphoto-dialog .dialog-content .selected-image-div img {
+.uploadphoto-dialog .dialog-content .content .selected-image-div img {
     width: 100%;
     max-height: 400px;
     object-fit: contain;

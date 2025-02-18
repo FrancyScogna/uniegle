@@ -1,50 +1,49 @@
 .setuserdata-div {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     width: 100%;
-}
-
-.setuserdata-div .title {
-    font-weight: bold;
-    margin-top: 30px;
-    margin-bottom: 10px;
-    font-size: 3rem;
-}
-
-.setuserdata-div .description-div {
-    margin-bottom: 20px;
-    width: 90%;
-    border: 1px solid rgb(0, 0, 0);
-    border-radius: 20px;
-    padding: 10px;
-    background-color: rgb(250, 250, 250);
-}
-
-.setuserdata-div .description-div .description {
-    text-align: center;
-    font-size: 17px;
+    min-height: 100%;
+    overflow-y: auto;
 }
 
 .setuserdata-div .form-div {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    margin: auto;
     align-items: center;
     width: 700px;
     background-color: white;
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-bottom: 20px;
+    padding-top: 20px;
     border-radius: 20px;
-    border: 1px solid rgb(0, 0, 0);
-    margin-bottom: 30px;
 }
 
-.setuserdata-div .form-div .form-title {
-    font-size: 20px;
+/*.setuserdata-div .form-div .form-title {
+    font-size: 23px;
     margin-bottom: 20px;
     font-weight: bold;
+}*/
+
+.setuserdata-div .backbutton-div {
+    display: flex;
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+.setuserdata-div .backbutton-div .icon {
+    font-size: 16px;
+    margin-right: 3px;
+}
+
+.setuserdata-div .form-div .description-div {
+    margin-bottom: 20px;
+    width: 90%;
+    border-radius: 20px !important;
+}
+
+.setuserdata-div .description-div .description {
+    font-size: 17px;
 }
 
 .setuserdata-div .form-div .divider {
@@ -61,6 +60,9 @@
 .setuserdata-div .form-div .image-buttons-div {
     display: flex;
     gap: 5px;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
 }
 
 .setuserdata-div .form-div .selected-image-div {
@@ -85,6 +87,9 @@
     display: flex;
     margin-top: 10px;
     gap: 5px;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
 }
 
 .setuserdata-div .form-div .button-icon {
@@ -104,7 +109,10 @@
     }
 
     .setuserdata-div .form-div {
-        width: calc(100% - 5px);
+        width: 100%;
+        border-radius: 0px;
+        border-left: 0px;
+        border-right: 0px;
     }
 
     .setuserdata-div .form-div .textfield {
