@@ -40,6 +40,10 @@
     margin: auto;
 }
 
+.uploadphoto-dialog .dialog-content .description .MuiSvgIcon-root {
+    color: rgb(255, 123, 34);
+}
+
 .uploadphoto-dialog .dialog-content .content .description {
     display: flex;
     margin-top: 10px;
