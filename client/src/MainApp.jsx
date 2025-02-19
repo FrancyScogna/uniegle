@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import "./MainApp.css";
 import { Typography, useMediaQuery } from "@mui/material";
 import "@fontsource/comfortaa";
@@ -7,7 +7,6 @@ function MainApp() {
 
     const mobile = useMediaQuery('(max-width:550px)');
     const location = useLocation();
-    const navigate = useNavigate();
     const [showHeader, setShowHeader] = useState(false);
     const [showFooter, setShowFooter] = useState(false);
 
@@ -58,14 +57,14 @@ function MainApp() {
                 <div className="footer">
                     <div className="authors">
                         <Typography className="text">
-                            Francesco Scognamiglio M6300XXXX
+                            Francesco Scognamiglio M63001364
                         </Typography>
                         <Typography className="text">
-                            Felice Micillo M6300XXXX
+                            Felice Micillo M63001377
                         </Typography>
                     </div>
                     <div className="company" >
-                        <Typography className="text">Powered by Uniegle TM</Typography>
+                        <Typography className="text">Powered by Uniegle <sup className="logo-sup">®</sup></Typography>
                     </div>
                 </div>
             }

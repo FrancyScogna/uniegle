@@ -10,8 +10,7 @@
 .chat-div .central-div {
     display: flex;
     flex-direction: column;
-    max-width: 800px;
-    width: 100%;
+    max-width: 900px;
     margin: auto;
 }
 
@@ -102,10 +101,26 @@
     justify-content: center;
 }
 
+.chat-div .content-div .buttons-div .button {
+    border-radius: 0px;
+}
+
 .chat-div .content-div .buttons-div .button-icon {
     margin-left: 4px;
     margin-top: -3px;
     font-size: 20px;
+}
+
+.close-drawer {
+    display: flex;
+}
+
+.close-drawer .icon-button {
+    margin-left: auto;
+}
+
+.close-drawer .icon-button .icon {
+    font-size: 30px;
 }
 
 @media screen and (max-width: 550px) {
@@ -193,7 +208,6 @@
 
     .chat-div .content-div .buttons-div {
         display: flex;
-        gap: 5px;
         margin-top: 2px;
     }
 }

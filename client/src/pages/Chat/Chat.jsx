@@ -5,11 +5,13 @@ import MyCam from "../../component/MyCam/MyCam";
 import Request from "../../component/Request/Request";
 import TextChat from "../../component/TextChat/TextChat";
 import WhiteNoise from "../../assets/white_noise.mp4";
-import { Button, IconButton, Typography, useMediaQuery, Drawer } from "@mui/material";
+import { Button, IconButton, Typography, useMediaQuery, Drawer, Badge } from "@mui/material";
 import PublicIcon from '@mui/icons-material/Public';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import ChatIcon from '@mui/icons-material/Chat';
+import notificationSound from '../../assets/notification.wav';
+import CloseIcon from "@mui/icons-material/Close";
 
 function Chat({socket}){
 
@@ -29,16 +31,36 @@ function Chat({socket}){
     const localVideoRef = useRef();
     const remoteVideoRef = useRef();
     const peerConnection = useRef();
-
+    const [newMessagesCount, setNewMessagesCount] = useState(0);
+    const [mute, setMute] = useState(false);
+    const muteRef = useRef();
+    const openDrawerRef = useRef();
+    const [isTyping, setIsTyping] = useState(false);
 
     useEffect(() => {
         if (!mobile) {
             setOpenDrawer(false);
         }
     }, [mobile]);
+
+    useEffect(() => {
+        openDrawerRef.current = openDrawer;
+    },[openDrawer])
+
+    useEffect(() => {
+        muteRef.current = mute;
+    },[mute])
     
     useEffect(() => {
         const userDataJSON = localStorage.getItem("userData");
+        const mute = localStorage.getItem("muteNotification");
+        if(mute){
+            if(mute === "true"){
+                setMute(true);
+            }else{
+                setMute(false);
+            }
+        }
         const userData = JSON.parse(userDataJSON);
         if(!userData){
             navigate('/', {replace: true});
@@ -48,6 +70,10 @@ function Chat({socket}){
         }
         
     },[]);
+
+    useEffect(() => {
+        setNewMessagesCount(0);
+    },[mobile])
 
     useEffect(() => {
 
@@ -61,7 +87,8 @@ function Chat({socket}){
                 await peerConnection.current.addIceCandidate(data.candidate);
                 setDisabledChat(false);
                 setOpenRequest(false);
-                setStatus(`connected`)
+                setMessages([]);
+                setStatus(`connected`);
             } else if (data.sdp) {
                 await peerConnection.current.setRemoteDescription(new RTCSessionDescription(data.sdp));
                 if (data.sdp.type === 'offer') {
@@ -73,7 +100,7 @@ function Chat({socket}){
         });
 
         socket.on('paired', async (data) => {
-            setStatus("paired")
+            setStatus("paired");
             const configuration = {
                 iceServers: [
                     { urls: 'stun:stun.l.google.com:19302' },
@@ -98,13 +125,30 @@ function Chat({socket}){
             setRequest(null);
             setOpenRequest(false);
             setDisabledChat(true);
+            setNewMessagesCount(0);
             setMessages([]);
-            setStatus("disconnected")
+            setStatus("disconnected");
             remoteVideoRef.current.srcObject = null;
         });
 
         socket.on('chat message', (msg) => {
             setMessages((prevMessages) => [...prevMessages, { sender: 'partner', text: msg }]);
+            setIsTyping(false);
+            if(!openDrawerRef.current){
+                setNewMessagesCount((prevCount) => prevCount + 1);
+            }
+            if(!muteRef.current){
+                const audio = new Audio(notificationSound);
+                audio.play().catch((err) => console.error("Errore nella riproduzione del suono:", err));
+            }
+        });
+
+        socket.on('typing', () => {
+            setIsTyping(true);
+        });
+    
+        socket.on('stop typing', () => {
+            setIsTyping(false);
         });
 
         socket.on('request', (data) => {
@@ -116,7 +160,7 @@ function Chat({socket}){
         socket.on('rejected', () => {
             setRequest(null);
             setOpenRequest(false);
-            setStatus("rejectrequest")
+            setStatus("rejectrequest");
         })
 
         socket.on('missing userdata', () => {
@@ -132,6 +176,8 @@ function Chat({socket}){
             socket.off('user data');
             socket.off('request');
             socket.off('reject');
+            socket.off('typing');
+            socket.off('stop typing');
         };
     }, []);
 
@@ -170,6 +216,7 @@ function Chat({socket}){
     };
 
     const disconnectChat = () => {
+        setNewMessagesCount(0);
         socket.emit('exit');
         setRequest(null);
         setOpenRequest(false);
@@ -188,6 +235,7 @@ function Chat({socket}){
     }
 
     const onClickSkip = () => {
+        setNewMessagesCount(0);
         setStatus("skip")
         socket.emit('skip');
         setRequest(null);
@@ -210,6 +258,17 @@ function Chat({socket}){
 
     const onClickOpenChatMobile = () => {
         setOpenDrawer(true);
+        setNewMessagesCount(0);
+    }
+
+    const onClickStopChat = () => {
+        disconnectChat();
+        navigate("/user-profile", {replace: true});
+    }
+
+    const onClickMute = () => {
+        setMute(!mute);
+        localStorage.setItem("muteNotification", `${!mute}`);
     }
 
     return(
@@ -221,6 +280,7 @@ function Chat({socket}){
                 setRequest={setRequest} 
                 setOpenRequest={setOpenRequest} 
                 openRequest={openRequest}
+                stopChat={onClickStopChat}
                 socket={socket} />}
                 <div className="video-div">
                     <div className="my-cam">
@@ -233,7 +293,9 @@ function Chat({socket}){
                         startStream={startStream} />
                         {mobile && 
                         <IconButton onClick={onClickOpenChatMobile} className="mobile-chat-button">
-                            <ChatIcon className="icon" />
+                            <Badge badgeContent={newMessagesCount} color="primary">
+                                <ChatIcon className="icon" />
+                            </Badge>
                         </IconButton>}
                     </div>
                     <div className="other-cam">
@@ -269,17 +331,17 @@ function Chat({socket}){
                     disabledChat={disabledChat}
                     partnerData={request ? request : {}}
                     myData={userData}
+                    mute={mute}
+                    onClickMute={onClickMute}
+                    isTyping={isTyping}
                     socket={socket} />}
                     
                     <div className="buttons-div">
-                        <Button color="error" variant="contained" size="large" fullWidth onClick={() => {
-                            disconnectChat();
-                            navigate("/user-profile", {replace: true});
-                            }}>
+                        <Button className="button" color="error" variant="contained" size="large" fullWidth onClick={onClickStopChat}>
                                 Interrompi
                                 <StopCircleIcon className="button-icon"/>
                         </Button>
-                        <Button color="warning" variant="contained" size="large" fullWidth onClick={onClickSkip} disabled={disabledChat}>
+                        <Button className="button" color="warning" variant="contained" size="large" fullWidth onClick={onClickSkip} disabled={disabledChat}>
                             Skip
                             <SkipNextIcon className="button-icon"/>
                         </Button>
@@ -292,6 +354,11 @@ function Chat({socket}){
                     onClose={() => setOpenDrawer(false)}
                     PaperProps={{ style: { height: "52%", borderRadius: "15px 15px 0 0",overflow:'hidden' } }}
                 >
+                    <div className="close-drawer">
+                        <IconButton className="icon-button" onClick={() => setOpenDrawer(false)}>
+                            <CloseIcon className="icon" />
+                        </IconButton>
+                    </div>
                     <div style={{ padding: "10px", display: "flex", flexDirection: "column", height: "100%" }}>
                         <TextChat
                             messages={messages}
@@ -300,6 +367,9 @@ function Chat({socket}){
                             partnerData={request ? request : {}}
                             myData={userData}
                             socket={socket} 
+                            mute={mute}
+                            isTyping={isTyping}
+                            onClickMute={onClickMute}
                         />
                     </div>
                 </Drawer>

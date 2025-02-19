@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: "http://192.168.1.170:5173",
         methods: ["GET", "POST"]
     },
     maxHttpBufferSize: 1e7
@@ -83,6 +83,20 @@ io.on('connection', (socket) => {
             if(accept1 && accept2){
                 io.to(partner.id).emit('chat message', message);
             }
+        }
+    });
+
+    socket.on('typing', () => {
+        const partner = activePairs[socket.id];
+        if (partner && partner.id) {
+            io.to(partner.id).emit('typing', socket.id);
+        }
+    });
+    
+    socket.on('stop typing', () => {
+        const partner = activePairs[socket.id];
+        if (partner && partner.id) {
+            io.to(partner.id).emit('stop typing', socket.id);
         }
     });
 

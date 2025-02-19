@@ -88,3 +88,14 @@ body {
    font-size: 13px;
    color: white;
 }
+
+.footer .company .text .logo-sup {
+    font-size: 9px;
+}
+
+@media screen and (max-width: 550px) {
+    html {
+      touch-action: pan-x pan-y;
+      overscroll-behavior: none;
+    }
+  }
