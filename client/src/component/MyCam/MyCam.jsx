@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./MyCam.css";
 import { FormControl, IconButton, MenuItem, Select, Typography, useMediaQuery } from "@mui/material";
 import VideocamIcon from '@mui/icons-material/Videocam';
@@ -12,7 +12,6 @@ function MyCam({localVideoRef, startStream, selectedVideoDevice, selectedAudioDe
     const [selectedVideoDeviceIndex, setSelectedVideoDeviceIndex] = useState(0);
     const [showDevices, setShowDevices] = useState(false);
     const mobile = useMediaQuery("(max-width: 550px)")
-    
 
     const getDevices = async () => {
         await navigator.mediaDevices.getUserMedia({ video: true, audio: true });

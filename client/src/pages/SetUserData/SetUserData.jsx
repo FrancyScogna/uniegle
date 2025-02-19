@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import "./SetUserData.css";
 import { useEffect, useState } from "react";
 import UploadPhoto from "../../component/UploadPhoto/UploadPhoto";
-import { Alert, Button, Divider, TextField, Typography, useMediaQuery } from '@mui/material';
+import { Alert, Backdrop, Button, Divider, TextField, Typography, useMediaQuery } from '@mui/material';
 import EmptyImage from "../../assets/images-empty.png";
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -72,9 +72,11 @@ function SetUserData(){
 
     if(loading){
         return(
-            <div>
-                <h1>Loading...</h1>
-            </div>
+            <Backdrop open={loading}>
+                <Typography className="backdrop-logo" sx={{ fontFamily: "Comfortaa, sans-serif" }} >
+                    Uniegle<sup className="backdrop-logo-sup">®</sup>
+                </Typography>
+            </Backdrop>
         )
     }
 

@@ -15,26 +15,44 @@
     background-color: rgb(239, 238, 238);
 }
 
+.text-chat-messages .message-div {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    width: fit-content;
+    padding: 3px;
+    padding-inline: 10px;
+    border: 1px solid rgb(195, 78, 0);
+    border-radius: 30px;
+}
+
+.text-chat-messages .message-div .avatar {
+    margin-right: 5px;
+}
+
 .text-chat-form {
     display: flex;
     margin-top: 5px;
 }
 
-.text-chat-form button {
-    cursor: pointer;
+.text-chat-form .button-icon {
+    margin-left: 4px;
+    margin-top: -3px;
+    font-size: 20px;
 }
 
 @media screen and (max-width: 550px) {
     .text-chat-container {
         display: flex;
         flex-direction: column;
-        position: absolute;
+        position: relative;
         bottom: 0;
         left: 0;
         right: 0;
         min-height: 94%;
         padding: 10px;
         overflow: hidden;
+        border: none;
     }
     
     .text-chat-messages {
@@ -51,7 +69,6 @@
     }
     
     .text-chat-form input {
-        flex: 1;
         padding: 8px;
     }
     

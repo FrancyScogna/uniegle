@@ -29,7 +29,7 @@ function Preview(){
                 <div className="preview-organizer">
                     <Typography variant="h1">Incontra nuovi colleghi universitari</Typography>
                     <Typography variant="h2">Non perdere tempo! Conosci subito i tuoi nuovi colleghi e inizia a condividere esperienze.</Typography>
-                    <Button className="button-start" variant="contained" onClick={onClickStartChat}>Inizia a chattare</Button>
+                    <Button color="secondary" className="button-start" variant="contained" onClick={onClickStartChat}>Inizia a chattare</Button>
                 </div> 
             </div>     
         </div>

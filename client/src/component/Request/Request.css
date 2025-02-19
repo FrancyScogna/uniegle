@@ -8,7 +8,6 @@
 .request-dialog .dialog-title .top {
     display: flex;
     width: 100%;
-    justify-content: center;
 }
 
 .request-dialog .dialog-title .top .title{
@@ -28,25 +27,28 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: auto;
 }
 
-.request-dialog .dialog-content .top-buttons {
+.request-dialog .dialog-content .content {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    justify-content: center;
-    gap: 5px;
-    margin-top: 5px;
+    margin: auto;
+}
+
+.request-dialog .dialog-content .content .buttons-req {
     margin-bottom: 5px;
 }
 
-.request-dialog .dialog-content .button-icon {
+.request-dialog .dialog-content .content .button-icon  {
     margin-left: 4px;
     margin-top: -3px;
     font-size: 20px;
 }
 
-.request-dialog .dialog-content .selected-image-div {
+.request-dialog .dialog-content .content .selected-image-div {
     margin-bottom: 10px;
     margin-top: 10px;
     display: flex;
@@ -56,7 +58,7 @@
     align-items: center;
 }
 
-.request-dialog .dialog-content .selected-image-div img {
+.request-dialog .dialog-content .content .selected-image-div img {
     width: 100%;
     max-height: 400px;
     object-fit: contain;
