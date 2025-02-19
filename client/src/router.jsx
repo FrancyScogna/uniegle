@@ -5,7 +5,7 @@ import Preview from "./pages/Preview/Preview";
 import SetUserData from "./pages/SetUserData/SetUserData";
 import Chat from "./pages/Chat/Chat";
 
-const socket = io('http://192.168.1.170:4000');
+const socket = io('http://localhost:4000');
 
 const RouterApp = () => {
 
