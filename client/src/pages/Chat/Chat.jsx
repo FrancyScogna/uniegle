@@ -92,6 +92,7 @@ function Chat({socket}){
             } else if (data.sdp) {
                 await peerConnection.current.setRemoteDescription(new RTCSessionDescription(data.sdp));
                 if (data.sdp.type === 'offer') {
+                    await startStream(selectedVideoDevice, selectedAudioDevice);
                     const answer = await peerConnection.current.createAnswer();
                     await peerConnection.current.setLocalDescription(answer);
                     socket.emit('signal', { sdp: answer });
@@ -119,6 +120,13 @@ function Chat({socket}){
                 }
             };
             await startStream(selectedVideoDevice, selectedAudioDevice);
+
+            if(data.initiator){
+                const offer = await peerConnection.current.createOffer();
+                await peerConnection.current.setLocalDescription(offer);
+                socket.emit('signal', { sdp: offer });
+            }
+
         });
 
         socket.on('partner disconnected', () => {
@@ -210,9 +218,6 @@ function Chat({socket}){
             }
         });
 
-        const offer = await peerConnection.current.createOffer();
-        await peerConnection.current.setLocalDescription(offer);
-        socket.emit('signal', { sdp: offer });
     };
 
     const disconnectChat = () => {
