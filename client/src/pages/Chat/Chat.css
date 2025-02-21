@@ -59,6 +59,19 @@
     border-left: 1px solid black;
 }
 
+.chat-div .video-div .other-cam .logo {
+    position: absolute;
+    color: rgb(255, 102, 0);
+    font-size: 20px;
+    top: 10px;
+    left: 15px
+}
+
+.chat-div .video-div .other-cam .logo-sup {
+    color: rgb(255, 102, 0);
+    font-size: 9px;
+}
+
 .chat-div .video-div .other-cam video {
     display: flex;
     width: 100%;

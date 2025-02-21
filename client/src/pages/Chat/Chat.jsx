@@ -313,6 +313,9 @@ function Chat({socket}){
                         loop={!remoteVideoRef.current?.srcObject ? true : false}
                         autoPlay 
                         />
+                        <Typography className="logo" sx={{ fontFamily: "Comfortaa, sans-serif" }} >
+                            Uniegle<sup className="logo-sup">®</sup>
+                        </Typography>
                         <div className="status-div">
                             <PublicIcon className="icon" />
                             <Typography 
