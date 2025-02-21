@@ -74,6 +74,7 @@ function MyCam({localVideoRef, startStream, selectedVideoDevice, selectedAudioDe
                         <Select
                             size="small"
                             value={selectedVideoDevice}
+                            fullWidth
                             startAdornment={ <VideocamIcon className="icon" /> }
                             onChange={(e) => {
                                 const index = videoDevices.findIndex(device => device.deviceId === e.target.value);

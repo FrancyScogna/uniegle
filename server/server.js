@@ -59,8 +59,8 @@ io.on('connection', (socket) => {
         if (partner) {
             printLogs("requestaccepted", {user1: socket.id, user2: partner.id});
             if(partner.accepted){
-                io.to(socket.id).emit('paired', { partner: partner.id });
-                io.to(partner.id).emit('paired', { partner: socket.id });
+                io.to(socket.id).emit('paired', { partner: partner.id, initiator: false });
+                io.to(partner.id).emit('paired', { partner: socket.id, initiator: true});
                 printLogs("successconnection",{user1: socket.id, user2: partner.id});
             }else{
                 printLogs("waitingrequestaccepted", partner.id);
