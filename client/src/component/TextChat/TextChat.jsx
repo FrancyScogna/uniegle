@@ -8,8 +8,12 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 function TextChat({ messages, setMessages, disabledChat, socket, myData, partnerData, onClickMute, mute, isTyping }) {
     const [message, setMessage] = useState("");
     const mobile = useMediaQuery("(max-width: 550px)");
-    const [typingTimeout, setTypingTimeout] = useState(null);
     const messagesEndRef = useRef(null);
+    
+    // Riferimenti per debounce e timeout
+    const typingTimeoutRef = useRef(null);
+    const lastTypingTimeRef = useRef(0);
+    const isTypingRef = useRef(false);
 
     const sendMessage = (e) => {
         e.preventDefault();
@@ -26,14 +30,24 @@ function TextChat({ messages, setMessages, disabledChat, socket, myData, partner
 
     const handleTyping = (e) => {
         setMessage(e.target.value);
-    
-        socket.emit('typing');
-    
-        if (typingTimeout) clearTimeout(typingTimeout);
-    
-        setTypingTimeout(setTimeout(() => {
+
+        const now = Date.now();
+
+        // Invia "typing" solo se non è stato inviato negli ultimi 2 secondi
+        if (!isTypingRef.current || now - lastTypingTimeRef.current > 2000) {
+            socket.emit('typing');
+            isTypingRef.current = true;
+            lastTypingTimeRef.current = now;
+        }
+
+        // Reset del timeout se l'utente continua a digitare
+        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+
+        // Imposta un timeout per inviare "stop typing" dopo 2 secondi di inattività
+        typingTimeoutRef.current = setTimeout(() => {
             socket.emit('stop typing');
-        }, 2000));
+            isTypingRef.current = false;
+        }, 2000);
     };
 
     return (
