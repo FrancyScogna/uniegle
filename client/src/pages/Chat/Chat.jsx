@@ -36,6 +36,7 @@ function Chat({socket}){
     const muteRef = useRef();
     const openDrawerRef = useRef();
     const [isTyping, setIsTyping] = useState(false);
+    const [message, setMessage] = useState("");
 
     useEffect(() => {
         if (!mobile) {
@@ -133,6 +134,9 @@ function Chat({socket}){
             setRequest(null);
             setOpenRequest(false);
             setDisabledChat(true);
+            setIsTyping(false);
+            setMessage("");
+            setOpenDrawer(false);
             setNewMessagesCount(0);
             setMessages([]);
             setStatus("disconnected");
@@ -224,6 +228,7 @@ function Chat({socket}){
         setNewMessagesCount(0);
         socket.emit('exit');
         setRequest(null);
+        setMessage("");
         setOpenRequest(false);
         setDisabledChat(true);
         setMessages([]);
@@ -242,8 +247,9 @@ function Chat({socket}){
     const onClickSkip = () => {
         setNewMessagesCount(0);
         setStatus("skip")
+        setIsTyping(false);
+        setMessage("")
         socket.emit('skip');
-        setRequest(null);
         setOpenRequest(false);
         setDisabledChat(true);
         if(remoteVideoRef.current){
@@ -342,6 +348,8 @@ function Chat({socket}){
                     mute={mute}
                     onClickMute={onClickMute}
                     isTyping={isTyping}
+                    message={message}
+                    setMessage={setMessage}
                     socket={socket} />}
                     
                     <div className="buttons-div">
@@ -377,6 +385,8 @@ function Chat({socket}){
                             socket={socket} 
                             mute={mute}
                             isTyping={isTyping}
+                            message={message}
+                            setMessage={setMessage}
                             onClickMute={onClickMute}
                         />
                     </div>

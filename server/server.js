@@ -156,8 +156,14 @@ function checkAndPairUsers() {
     printLogs("checkandpairusers");
 
     while (waitingUsers.length >= 2) {
-        const user1 = waitingUsers.shift();
-        const user2 = waitingUsers.shift();
+        const index1 = Math.floor(Math.random() * waitingUsers.length);
+        let index2;
+        do {
+            index2 = Math.floor(Math.random() * waitingUsers.length);
+        } while (index2 === index1);
+
+        const user1 = waitingUsers.splice(index1, 1)[0];
+        const user2 = waitingUsers.splice(index2 > index1 ? index2 - 1 : index2, 1)[0];
 
         const socket1 = io.sockets.sockets.get(user1);
         const socket2 = io.sockets.sockets.get(user2);
@@ -184,7 +190,6 @@ function checkAndPairUsers() {
         printLogs('checkandpairusersfound', { user1, user2 });
     }
 }
-
 
 function cleanWaitingUsers(){
   waitingUsers = waitingUsers.filter((id) => id !== undefined);

@@ -5,6 +5,7 @@ body {
     height: 100vh;
     overflow-x: hidden;
     background-color: rgb(255, 235, 199);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 #root {
