@@ -5,8 +5,7 @@ import SendIcon from '@mui/icons-material/Send';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 
-function TextChat({ messages, setMessages, disabledChat, socket, myData, partnerData, onClickMute, mute, isTyping }) {
-    const [message, setMessage] = useState("");
+function TextChat({ messages, setMessages, disabledChat, socket, myData, partnerData, onClickMute, mute, isTyping, message, setMessage }) {
     const mobile = useMediaQuery("(max-width: 550px)");
     const messagesEndRef = useRef(null);
     
