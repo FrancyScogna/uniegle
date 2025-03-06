@@ -37,17 +37,32 @@ function MyCam({localVideoRef, startStream, selectedVideoDevice, selectedAudioDe
 
     const startCamera = async () => {
         try {
-            const {videoinput, audioinput} = getDevices();
+            const devices = await getDevices();
+    
+            if (devices.videoinput.length === 0) {
+                console.error("Nessuna webcam trovata.");
+                return;
+            }
+    
+            if (devices.audioinput.length === 0) {
+                console.warn("Nessun microfono trovato. Procedo solo con il video.");
+            }
+    
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { deviceId: videoinput ? { exact: videoinput } : undefined },
-                audio: { deviceId: audioinput ? { exact: audioinput } : undefined },
+                video: { deviceId: { exact: devices.videoinput[0].deviceId } },
+                audio: devices.audioinput.length > 0 ? { deviceId: { exact: devices.audioinput[0].deviceId } } : false,
             });
-            localVideoRef.current.srcObject = stream;
-            localVideoRef.current.play();
+    
+            if (localVideoRef.current) {
+                localVideoRef.current.srcObject = stream;
+                localVideoRef.current.play();
+            }
+    
         } catch (error) {
-            throw error;
+            console.error("Errore nell'avvio della fotocamera:", error);
         }
     };
+    
 
     const changeCameraButton = () => {
         if (videoDevices.length > 0) {
