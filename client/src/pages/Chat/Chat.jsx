@@ -225,24 +225,41 @@ function Chat({socket}){
     };
 
     const disconnectChat = () => {
-        setNewMessagesCount(0);
-        socket.emit('exit');
-        setRequest(null);
-        setMessage("");
-        setOpenRequest(false);
-        setDisabledChat(true);
-        setMessages([]);
-        if(localVideoRef.current){
-            const stream = localVideoRef.current?.srcObject;
-            if (stream) {
-                const tracks = stream.getTracks();
-                tracks.forEach((track) => track.stop());
+        return new Promise((resolve, reject) => {
+            try{
+            setNewMessagesCount(0);
+            socket.emit('exit');
+            setRequest(null);
+            setMessage("");
+            setOpenRequest(false);
+            setDisabledChat(true);
+            setMessages([]);
+            if (localVideoRef.current) {
+                const stream = localVideoRef.current.srcObject;
+                if (stream) {
+                    const tracks = stream.getTracks();
+                    tracks.forEach((track) => {
+                        track.stop();
+                        stream.removeTrack(track);
+                    });
+                }
+                localVideoRef.current.srcObject = null;
+                localVideoRef.current.removeAttribute("src");
+                localVideoRef.current.removeAttribute("srcObject");
+            }  
+            if(remoteVideoRef.current){
+                remoteVideoRef.current.srcObject = null; 
+                remoteVideoRef.current.removeAttribute("src");
+                remoteVideoRef.current.removeAttribute("srcObject");
             }
-        }    
-        if(remoteVideoRef.current){
-            remoteVideoRef.current.srcObject = null; 
-        }
-    }
+            console.log("ciao")
+            resolve();
+            }catch(error){
+                console.log(error);
+                reject();
+            }
+        })
+    }    
 
     const onClickSkip = () => {
         setNewMessagesCount(0);
@@ -272,8 +289,9 @@ function Chat({socket}){
         setNewMessagesCount(0);
     }
 
-    const onClickStopChat = () => {
-        disconnectChat();
+    const onClickStopChat = async () => {
+        await disconnectChat();
+        console.log("fine")
         navigate("/user-profile", {replace: true});
     }
 

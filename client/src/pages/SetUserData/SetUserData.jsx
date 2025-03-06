@@ -2,12 +2,13 @@ import { useNavigate } from "react-router-dom";
 import "./SetUserData.css";
 import { useEffect, useState } from "react";
 import UploadPhoto from "../../component/UploadPhoto/UploadPhoto";
-import { Alert, Backdrop, Button, Divider, TextField, Typography, useMediaQuery } from '@mui/material';
+import { Alert, Button, Divider, TextField, Typography, useMediaQuery } from '@mui/material';
 import EmptyImage from "../../assets/images-empty.png";
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import DeleteIcon from '@mui/icons-material/Delete';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Loading from "../../component/Loading/Loading";
 
 function SetUserData(){
 
@@ -72,11 +73,7 @@ function SetUserData(){
 
     if(loading){
         return(
-            <Backdrop open={loading}>
-                <Typography className="backdrop-logo" sx={{ fontFamily: "Comfortaa, sans-serif" }} >
-                    Uniegle<sup className="backdrop-logo-sup">®</sup>
-                </Typography>
-            </Backdrop>
+            <Loading loading={loading} subtitle={"Caricamento dati..."}/>
         )
     }
 
