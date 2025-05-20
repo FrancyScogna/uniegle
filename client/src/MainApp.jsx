@@ -3,7 +3,6 @@ import "./MainApp.css";
 import { Typography, useMediaQuery } from "@mui/material";
 import "@fontsource/comfortaa";
 import { useEffect, useState } from "react";
-
 function MainApp() {
 
     const mobile = useMediaQuery('(max-width:550px)');
